@@ -22,7 +22,7 @@ func createNode(name string, age int, passion string) Node {
 // Append adds a new node with the given name, age, and passion to the
 // end of the list. It updates the list's head and tail pointers and
 // increments the list size.
-func Append(list *List, name string, age int, passion string) bool {
+func (list *List) Append(name string, age int, passion string) bool {
 	node := createNode(name, age, passion)
 
 	if list.Head == nil {
@@ -38,7 +38,7 @@ func Append(list *List, name string, age int, passion string) bool {
 }
 
 // Prepend adds a new node at the beginning of the list.
-func Prepend(list *List, name string, age int, passion string) bool {
+func (list *List) Prepend(name string, age int, passion string) bool {
 	node := createNode(name, age, passion)
 
 	if list.Head == nil {
@@ -54,7 +54,7 @@ func Prepend(list *List, name string, age int, passion string) bool {
 }
 
 // AtIndex Returns the node at the given index
-func AtIndex(list *List, index int) *Node {
+func (list *List) AtIndex(index int) *Node {
 	if list.Head == nil || index >= list.Size {
 		return nil
 	}
@@ -84,14 +84,14 @@ func AtIndex(list *List, index int) *Node {
 //
 // On a successful node removal, `true` is returned to signal the element was
 // removed. `false` is returned if any error occurred.
-func DeleteAt(list *List, index int) bool {
+func (list *List) DeleteAt(index int) bool {
 	if index == 0 {
 		list.Head = list.Head.Next
 		list.Size -= 1
 		return true
 	}
 
-	nodeToDelete := AtIndex(list, index)
+	nodeToDelete := list.AtIndex(index)
 
 	if nodeToDelete == nil {
 		fmt.Println("Element not found, nothing deleted")
@@ -99,7 +99,7 @@ func DeleteAt(list *List, index int) bool {
 	}
 
 	if list.Size > 1 {
-		nodeBefore := AtIndex(list, index-1)
+		nodeBefore := list.AtIndex(index - 1)
 
 		nodeBefore.Next = nodeToDelete.Next
 	}
@@ -110,21 +110,30 @@ func DeleteAt(list *List, index int) bool {
 
 // PrintReverse prints the list in reverse without tampering with the original
 // order of the list.
-func PrintReverse(headNode *Node) {
+func (list *List) PrintReverse() {
+	if list == nil {
+		return
+	}
+
+	reversePrintHelper(list.Head)
+}
+
+// reversePrintHelper is helper function to print the nodes in reverse
+func reversePrintHelper(headNode *Node) {
 	if headNode == nil {
 		return
 	}
 
-	PrintReverse(headNode.Next)
-	fmt.Printf("%s ~> ", nodeInfo(headNode))
+	reversePrintHelper(headNode.Next)
+	fmt.Printf("%s ~> ", headNode.nodeInfo())
 }
 
 // InsertAt inserts a node with the name, age, and passion at the given position.
 // This function will return `true` on a successful insertion, `false` otherwise.
 //
 // Note: Negative indexing is not supported (yet).
-func InsertAt(
-	list *List, index int, name string, age int, passion string,
+func (list *List) InsertAt(
+	index int, name string, age int, passion string,
 ) bool {
 	if index < 0 {
 		fmt.Println("Negative indexing not supported")
@@ -132,15 +141,15 @@ func InsertAt(
 	}
 
 	if index == 0 {
-		return Prepend(list, name, age, passion)
+		return list.Prepend(name, age, passion)
 	}
 
 	if index >= list.Size {
-		return Append(list, name, age, passion)
+		return list.Append(name, age, passion)
 	}
 
 	newNode := createNode(name, age, passion)
-	nodeBefore := AtIndex(list, index-1)
+	nodeBefore := list.AtIndex(index - 1)
 
 	newNode.Next = nodeBefore.Next
 	nodeBefore.Next = &newNode
