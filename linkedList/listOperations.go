@@ -10,9 +10,10 @@ func NewList() *List {
 	return &List{nil, nil, 0}
 }
 
-// createNode creates a node to be used by another functions
-func createNode(name string, age int, passion string) Node {
-	return Node{
+// createNode creates a node to be used by another functions. It returns the
+// address of the newly created node.
+func createNode(name string, age int, passion string) *Node {
+	return &Node{
 		Name:    name,
 		Age:     age,
 		Passion: passion,
@@ -26,13 +27,13 @@ func (list *List) Append(name string, age int, passion string) bool {
 	node := createNode(name, age, passion)
 
 	if list.Head == nil {
-		list.Head = &node
+		list.Head = node
 	} else {
-		list.Tail.Next = &node
+		list.Tail.Next = node
 	}
 
 	list.Size += 1
-	list.Tail = &node
+	list.Tail = node
 
 	return true
 }
@@ -42,12 +43,12 @@ func (list *List) Prepend(name string, age int, passion string) bool {
 	node := createNode(name, age, passion)
 
 	if list.Head == nil {
-		list.Tail = &node
+		list.Tail = node
 	} else {
 		node.Next = list.Head
 	}
 
-	list.Head = &node
+	list.Head = node
 	list.Size += 1
 
 	return true
@@ -152,7 +153,7 @@ func (list *List) InsertAt(
 	nodeBefore := list.AtIndex(index - 1)
 
 	newNode.Next = nodeBefore.Next
-	nodeBefore.Next = &newNode
+	nodeBefore.Next = newNode
 
 	list.Size += 1
 
