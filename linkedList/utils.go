@@ -29,5 +29,5 @@ func PrintNodeInfo(node *Node) {
 
 // nodeInfo returns a string representation of the current node.
 func nodeInfo(node *Node) string {
-	return fmt.Sprintf("%s (%d %s)", node.Name, node.Age, node.Passion)
+	return fmt.Sprintf("%s (%d, %s)", node.Name, node.Age, node.Passion)
 }
