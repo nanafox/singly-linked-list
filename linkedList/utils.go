@@ -5,8 +5,8 @@ import (
 )
 
 // Print prints a visual representation of the linked list.
-func (list *List) Print() {
-	if list == nil || list.Size == 0 {
+func (list List) Print() {
+	if list.Head == nil || list.Size == 0 {
 		fmt.Println("nil")
 		return
 	}
@@ -23,11 +23,11 @@ func (list *List) Print() {
 }
 
 // PrintNodeInfo prints information about a specific node in the list.
-func (node *Node) PrintNodeInfo() {
+func (node Node) PrintNodeInfo() {
 	fmt.Printf("%s\n", node.nodeInfo())
 }
 
 // nodeInfo returns a string representation of the current node.
-func (node *Node) nodeInfo() string {
+func (node Node) nodeInfo() string {
 	return fmt.Sprintf("%s (%d, %s)", node.Name, node.Age, node.Passion)
 }

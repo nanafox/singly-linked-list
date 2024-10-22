@@ -55,7 +55,7 @@ func (list *List) Prepend(name string, age int, passion string) bool {
 }
 
 // AtIndex Returns the node at the given index
-func (list *List) AtIndex(index int) *Node {
+func (list List) AtIndex(index int) *Node {
 	if list.Head == nil || index >= list.Size {
 		return nil
 	}
@@ -111,8 +111,8 @@ func (list *List) DeleteAt(index int) bool {
 
 // PrintReverse prints the list in reverse without tampering with the original
 // order of the list.
-func (list *List) PrintReverse() {
-	if list == nil {
+func (list List) PrintReverse() {
+	if list.Head == nil {
 		return
 	}
 
