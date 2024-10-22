@@ -1,6 +1,7 @@
 package linkedList
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -23,7 +24,10 @@ func createNode(name string, age int, passion string) *Node {
 // Append adds a new node with the given name, age, and passion to the
 // end of the list. It updates the list's head and tail pointers and
 // increments the list size.
-func (list *List) Append(name string, age int, passion string) bool {
+func (list *List) Append(name string, age int, passion string) (*Node, error) {
+	if list == nil {
+		return nil, errors.New("append: list is uninitialized")
+	}
 	node := createNode(name, age, passion)
 
 	if list.Head == nil {
@@ -35,11 +39,15 @@ func (list *List) Append(name string, age int, passion string) bool {
 	list.Size += 1
 	list.Tail = node
 
-	return true
+	return node, nil
 }
 
 // Prepend adds a new node at the beginning of the list.
-func (list *List) Prepend(name string, age int, passion string) bool {
+func (list *List) Prepend(name string, age int, passion string) (*Node, error) {
+	if list == nil {
+		return nil, errors.New("prepend: list is uninitialized")
+	}
+
 	node := createNode(name, age, passion)
 
 	if list.Head == nil {
@@ -51,21 +59,21 @@ func (list *List) Prepend(name string, age int, passion string) bool {
 	list.Head = node
 	list.Size += 1
 
-	return true
+	return node, nil
 }
 
 // AtIndex Returns the node at the given index
-func (list List) AtIndex(index int) *Node {
+func (list List) AtIndex(index int) (*Node, error) {
 	if list.Head == nil || index >= list.Size {
-		return nil
+		return nil, errors.New("invalid index")
 	}
 
 	if index == 0 {
-		return list.Head
+		return list.Head, nil
 	}
 
 	if index == list.Size-1 {
-		return list.Tail
+		return list.Tail, nil
 	}
 
 	currentIndex := 0
@@ -76,37 +84,36 @@ func (list List) AtIndex(index int) *Node {
 		currentNode = currentNode.Next
 	}
 
-	return currentNode
+	return currentNode, nil
 }
 
 // DeleteAt deletes the node or element at the given index.
 // Nothing is removed if the index provided is out of bounds, and an error
 // message is printed.
 //
-// On a successful node removal, `true` is returned to signal the element was
-// removed. `false` is returned if any error occurred.
-func (list *List) DeleteAt(index int) bool {
+// On a successful node removal, no error is returned. Errors are returned when
+// the operation fails.
+func (list *List) DeleteAt(index int) error {
 	if index == 0 {
 		list.Head = list.Head.Next
 		list.Size -= 1
-		return true
+		return nil
 	}
 
-	nodeToDelete := list.AtIndex(index)
+	nodeToDelete, err := list.AtIndex(index)
 
-	if nodeToDelete == nil {
-		fmt.Println("Element not found, nothing deleted")
-		return false
+	if err != nil {
+		return err
 	}
 
 	if list.Size > 1 {
-		nodeBefore := list.AtIndex(index - 1)
+		nodeBefore, _ := list.AtIndex(index - 1)
 
 		nodeBefore.Next = nodeToDelete.Next
 	}
 
 	list.Size -= 1
-	return true
+	return nil
 }
 
 // PrintReverse prints the list in reverse without tampering with the original
@@ -130,15 +137,15 @@ func reversePrintHelper(headNode *Node) {
 }
 
 // InsertAt inserts a node with the name, age, and passion at the given position.
-// This function will return `true` on a successful insertion, `false` otherwise.
+// It returns the newly inserted node and no errors if the insertion is
+// successful. On error, the node portion is nil and an error is returned.
 //
 // Note: Negative indexing is not supported (yet).
 func (list *List) InsertAt(
 	index int, name string, age int, passion string,
-) bool {
+) (*Node, error) {
 	if index < 0 {
-		fmt.Println("Negative indexing not supported")
-		return false
+		return nil, errors.New("InsertAt: negative indexing not supported")
 	}
 
 	if index == 0 {
@@ -150,12 +157,12 @@ func (list *List) InsertAt(
 	}
 
 	newNode := createNode(name, age, passion)
-	nodeBefore := list.AtIndex(index - 1)
+	nodeBefore, _ := list.AtIndex(index - 1)
 
 	newNode.Next = nodeBefore.Next
 	nodeBefore.Next = newNode
 
 	list.Size += 1
 
-	return true
+	return newNode, nil
 }
