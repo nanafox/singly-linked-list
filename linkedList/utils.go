@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// PrintLinkedList Prints a visual representation of the linked list
+// PrintLinkedList prints a visual representation of the linked list.
 func PrintLinkedList(list *List) {
 	if list == nil || list.Size == 0 {
 		fmt.Println("nil")
@@ -14,10 +14,7 @@ func PrintLinkedList(list *List) {
 	currentNode := list.Head
 
 	for currentNode != nil {
-		fmt.Printf(
-			"%s (%d, %s) ~> ",
-			currentNode.Name, currentNode.Age, currentNode.Passion,
-		)
+		fmt.Printf("%s ~> ", nodeInfo(currentNode))
 
 		currentNode = currentNode.Next
 	}
@@ -25,10 +22,12 @@ func PrintLinkedList(list *List) {
 	fmt.Println("nil")
 }
 
-// PrintNodeInfo Prints information about a specific node in the list
+// PrintNodeInfo prints information about a specific node in the list.
 func PrintNodeInfo(node *Node) {
-	fmt.Printf(
-		"%s (%d, %s)\n",
-		node.Name, node.Age, node.Passion,
-	)
+	fmt.Printf("%s\n", nodeInfo(node))
+}
+
+// nodeInfo returns a string representation of the current node.
+func nodeInfo(node *Node) string {
+	return fmt.Sprintf("%s (%d %s)", node.Name, node.Age, node.Passion)
 }

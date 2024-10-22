@@ -2,10 +2,13 @@ package linkedList
 
 import "fmt"
 
+// NewList initializes a new list instance to be used. It returns the pointer
+// to the newly created list
 func NewList() *List {
 	return &List{nil, nil, 0}
 }
 
+// createNode creates a node to be used by another functions
 func createNode(name string, age int, passion string) Node {
 	return Node{
 		Name:    name,
@@ -14,6 +17,9 @@ func createNode(name string, age int, passion string) Node {
 	}
 }
 
+// Append adds a new node with the given name, age, and passion to the
+// end of the list. It updates the list's head and tail pointers and
+// increments the list size.
 func Append(list *List, name string, age int, passion string) {
 	node := createNode(name, age, passion)
 
@@ -27,6 +33,7 @@ func Append(list *List, name string, age int, passion string) {
 	list.Tail = &node
 }
 
+// Prepend adds a new node at the beginning of the list.
 func Prepend(list *List, name string, age int, passion string) {
 	node := createNode(name, age, passion)
 
@@ -65,18 +72,24 @@ func AtIndex(list *List, index int) *Node {
 	return currentNode
 }
 
-func DeleteAt(list *List, index int) {
+// DeleteAt deletes the node or element at the given index.
+// Nothing is removed if the index provided is out of bounds, and an error
+// message is printed.
+//
+// On a successful node removal, `true` is returned to signal the element was
+// removed. `false` is returned if any error occurred.
+func DeleteAt(list *List, index int) bool {
 	if index == 0 {
 		list.Head = list.Head.Next
 		list.Size -= 1
-		return
+		return true
 	}
 
 	nodeToDelete := AtIndex(list, index)
 
 	if nodeToDelete == nil {
 		fmt.Println("Element not found, nothing deleted")
-		return
+		return false
 	}
 
 	if list.Size > 1 {
@@ -86,4 +99,5 @@ func DeleteAt(list *List, index int) {
 	}
 
 	list.Size -= 1
+	return true
 }
