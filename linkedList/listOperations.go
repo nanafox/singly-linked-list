@@ -2,23 +2,12 @@ package linkedList
 
 import (
 	"errors"
-	"fmt"
 )
 
 // NewList initializes a new list instance to be used. It returns the pointer
 // to the newly created list
 func NewList() *List {
 	return &List{nil, nil, 0}
-}
-
-// createNode creates a node to be used by another functions. It returns the
-// address of the newly created node.
-func createNode(name string, age int, passion string) *Node {
-	return &Node{
-		Name:    name,
-		Age:     age,
-		Passion: passion,
-	}
 }
 
 // Append adds a new node with the given name, age, and passion to the
@@ -63,7 +52,7 @@ func (list *List) Prepend(name string, age int, passion string) (*Node, error) {
 }
 
 // AtIndex Returns the node at the given index
-func (list List) AtIndex(index int) (*Node, error) {
+func (list *List) AtIndex(index int) (*Node, error) {
 	if list.Head == nil || index >= list.Size {
 		return nil, errors.New("invalid index")
 	}
@@ -116,25 +105,7 @@ func (list *List) DeleteAt(index int) error {
 	return nil
 }
 
-// PrintReverse prints the list in reverse without tampering with the original
-// order of the list.
-func (list List) PrintReverse() {
-	if list.Head == nil {
-		return
-	}
-
-	reversePrintHelper(list.Head)
-}
-
 // reversePrintHelper is helper function to print the nodes in reverse
-func reversePrintHelper(headNode *Node) {
-	if headNode == nil {
-		return
-	}
-
-	reversePrintHelper(headNode.Next)
-	fmt.Printf("%s ~> ", headNode.nodeInfo())
-}
 
 // InsertAt inserts a node with the name, age, and passion at the given position.
 // It returns the newly inserted node and no errors if the insertion is
