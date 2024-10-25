@@ -1,58 +1,64 @@
-package linkedList
+package list
 
 import (
 	"errors"
+	"fmt"
+	"github.com/nanafox/singly-linked-list/pkg/node"
 )
 
-// NewList initializes a new list instance to be used. It returns the pointer
+// New initializes a new list instance to be used. It returns the pointer
 // to the newly created list
-func NewList() *List {
+func New() *List {
 	return &List{nil, nil, 0}
 }
 
 // Append adds a new node with the given name, age, and passion to the
 // end of the list. It updates the list's head and tail pointers and
 // increments the list size.
-func (list *List) Append(name string, age int, passion string) (*Node, error) {
+func (list *List) Append(name string, age int, passion string) (
+	*node.Node, error,
+) {
 	if list == nil {
 		return nil, errors.New("append: list is uninitialized")
 	}
-	node := createNode(name, age, passion)
+	newNode := node.Create(name, age, passion)
 
 	if list.Head == nil {
-		list.Head = node
+		list.Head = newNode
 	} else {
-		list.Tail.Next = node
+		list.Tail.Next = newNode
 	}
 
 	list.Size += 1
-	list.Tail = node
+	list.Tail = newNode
 
-	return node, nil
+	return newNode, nil
 }
 
 // Prepend adds a new node at the beginning of the list.
-func (list *List) Prepend(name string, age int, passion string) (*Node, error) {
+func (list *List) Prepend(name string, age int, passion string) (
+	*node.Node, error,
+) {
 	if list == nil {
 		return nil, errors.New("prepend: list is uninitialized")
 	}
 
-	node := createNode(name, age, passion)
+	newNode := node.Create(name, age, passion)
 
 	if list.Head == nil {
-		list.Tail = node
+		list.Tail = newNode
 	} else {
-		node.Next = list.Head
+		newNode.Next = list.Head
 	}
 
-	list.Head = node
+	list.Head = newNode
 	list.Size += 1
 
-	return node, nil
+	return newNode, nil
 }
 
 // AtIndex Returns the node at the given index
-func (list *List) AtIndex(index int) (*Node, error) {
+func (list *List) AtIndex(index int) (*node.Node, error) {
 	if list.Head == nil || index >= list.Size {
 		return nil, errors.New("invalid index")
 	}
@@ -114,7 +120,7 @@ func (list *List) DeleteAt(index int) error {
 // Note: Negative indexing is not supported (yet).
 func (list *List) InsertAt(
 	index int, name string, age int, passion string,
-) (*Node, error) {
+) (*node.Node, error) {
 	if index < 0 {
 		return nil, errors.New("InsertAt: negative indexing not supported")
 	}
@@ -127,7 +133,7 @@ func (list *List) InsertAt(
 		return list.Append(name, age, passion)
 	}
 
-	newNode := createNode(name, age, passion)
+	newNode := node.Create(name, age, passion)
 	nodeBefore, _ := list.AtIndex(index - 1)
 
 	newNode.Next = nodeBefore.Next
@@ -136,4 +142,32 @@ func (list *List) InsertAt(
 	list.Size += 1
 
 	return newNode, nil
+}
+
+// Print prints a visual representation of the linked list.
+func (list *List) Print() {
+	if list.Head == nil || list.Size == 0 {
+		fmt.Println("nil")
+		return
+	}
+
+	currentNode := list.Head
+
+	for currentNode != nil {
+		fmt.Printf("%s ~> ", currentNode.NodeInfo())
+
+		currentNode = currentNode.Next
+	}
+
+	fmt.Println("nil")
+}
+
+// PrintReverse prints the list in reverse without tampering with the original
+// order of the list.
+func (list *List) PrintReverse() {
+	if list.Head == nil {
+		return
+	}
+
+	node.ReversePrintHelper(list.Head)
 }

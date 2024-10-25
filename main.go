@@ -2,61 +2,63 @@ package main
 
 import (
 	"fmt"
-	"singlyLinkedList/linkedList"
+	"github.com/nanafox/singly-linked-list/pkg/list"
 )
 
 func main() {
-	list := linkedList.NewList()
+	myList := list.New()
 
-	_, err := list.Append("Maxwell", 12, "Change the world")
+	_, err := myList.Append("Maxwell", 12, "Change the world")
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = list.Append("Batman", 32, "Clean up Gotham of crime")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	_, err = list.Prepend("Clark Kent", 43, "Make the world a better place")
+	_, err = myList.Append("Batman", 32, "Clean up Gotham of crime")
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	list.Print()
+	_, err = myList.Prepend("Clark Kent", 43, "Make the world a better place")
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	node, _ := list.AtIndex(1)
+	myList.Print()
+
+	node, _ := myList.AtIndex(1)
 
 	node.PrintNodeInfo()
 
-	err = list.DeleteAt(1)
+	err = myList.DeleteAt(1)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	list.Print()
+	myList.Print()
 
-	list.PrintReverse()
+	myList.PrintReverse()
 	fmt.Println("nil")
 
-	node, err = list.InsertAt(2, "Diana Prince", 1200, "Make man's world a better place")
+	node, err = myList.InsertAt(
+		2, "Diana Prince", 1200, "Make man's world a better place",
+	)
 	if err != nil {
 		fmt.Println(err)
 	} else {
 		node.PrintNodeInfo()
 	}
 
-	list.Print()
+	myList.Print()
 
 	// Insertion using negative index returns an error
-	node, err = list.InsertAt(-5, "Nothin", 3, "blah")
+	node, err = myList.InsertAt(-5, "Nothin", 3, "blah")
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	// Set list to nil and try insertion
-	list = nil
+	// Set myList to nil and try insertion
+	myList = nil
 
-	node, err = list.Append("Hello", 12, "anything for the world")
+	node, err = myList.Append("Hello", 12, "anything for the world")
 
 	// this should print the error
 	if err != nil {
