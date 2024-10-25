@@ -26,7 +26,7 @@ func main() {
 
 	node, _ := myList.AtIndex(1)
 
-	node.PrintNodeInfo()
+	node.PrintInfo()
 
 	err = myList.DeleteAt(1)
 	if err != nil {
@@ -44,7 +44,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		node.PrintNodeInfo()
+		node.PrintInfo()
 	}
 
 	myList.Print()

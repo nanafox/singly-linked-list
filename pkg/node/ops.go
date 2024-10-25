@@ -14,13 +14,13 @@ func Create(name string, age int, passion string) *Node {
 	}
 }
 
-// PrintNodeInfo prints information about a specific node in the list.
-func (node Node) PrintNodeInfo() {
-	fmt.Printf("%s\n", node.NodeInfo())
+// PrintInfo prints information about a specific node in the list.
+func (node Node) PrintInfo() {
+	fmt.Printf("%s\n", node.Info())
 }
 
-// NodeInfo returns a string representation of the current node.
-func (node Node) NodeInfo() string {
+// Info returns a string representation of the current node.
+func (node Node) Info() string {
 	return fmt.Sprintf("%s (%d, %s)", node.Name, node.Age, node.Passion)
 }
 
@@ -32,5 +32,5 @@ func ReversePrintHelper(headNode *Node) {
 	}
 
 	ReversePrintHelper(headNode.Next)
-	fmt.Printf("%s ~> ", headNode.NodeInfo())
+	fmt.Printf("%s ~> ", headNode.Info())
 }

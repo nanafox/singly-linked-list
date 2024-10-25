@@ -154,7 +154,7 @@ func (list *List) Print() {
 	currentNode := list.Head
 
 	for currentNode != nil {
-		fmt.Printf("%s ~> ", currentNode.NodeInfo())
+		fmt.Printf("%s ~> ", currentNode.Info())
 
 		currentNode = currentNode.Next
 	}
