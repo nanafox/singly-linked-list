@@ -6,6 +6,14 @@ import (
 	"github.com/nanafox/singly-linked-list/pkg/node"
 )
 
+type UninitializedError struct {
+	method string
+}
+
+func (e *UninitializedError) Error() string {
+	return fmt.Sprintf("%s: list is uninitialized", e.method)
+}
+
 // New initializes a new list instance to be used. It returns the pointer
 // to the newly created list
 func New() *List {
@@ -19,7 +27,7 @@ func (list *List) Append(name string, age int, passion string) (
 	*node.Node, error,
 ) {
 	if list == nil {
-		return nil, errors.New("append: list is uninitialized")
+		return nil, &UninitializedError{method: "list.Append"}
 	}
 	newNode := node.Create(name, age, passion)
 
@@ -40,7 +48,7 @@ func (list *List) Prepend(name string, age int, passion string) (
 	*node.Node, error,
 ) {
 	if list == nil {
-		return nil, errors.New("prepend: list is uninitialized")
+		return nil, &UninitializedError{method: "list.Prepend"}
 	}
 
 	newNode := node.Create(name, age, passion)
@@ -89,9 +97,16 @@ func (list *List) AtIndex(index int) (*node.Node, error) {
 // On a successful node removal, no error is returned. Errors are returned when
 // the operation fails.
 func (list *List) DeleteAt(index int) error {
+	if list.Size == 0 {
+		return errors.New("list.DeleteAt: cannot delete from an empty list")
+	}
+
 	if index == 0 {
 		list.Head = list.Head.Next
 		list.Size -= 1
+
+		list.isEmpty()
+
 		return nil
 	}
 
@@ -108,6 +123,8 @@ func (list *List) DeleteAt(index int) error {
 	}
 
 	list.Size -= 1
+
+	list.isEmpty()
 	return nil
 }
 
@@ -170,4 +187,18 @@ func (list *List) PrintReverse() {
 	}
 
 	node.ReversePrintHelper(list.Head)
+}
+
+// isEmpty checks to verify if the list empty or not. Once it verifies the size
+// of the list is zero, it means the list is empty. It then sets the head and
+// tail pointers to nil and return `true`. `false` is returned otherwise.
+func (list *List) isEmpty() bool {
+	if list.Size == 0 {
+		list.Head = nil
+		list.Tail = nil
+
+		return true
+	}
+
+	return false
 }
